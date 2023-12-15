@@ -1,9 +1,10 @@
 import 'package:app_merchant_saler/constant.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 
 // ignore: must_be_immutable
 class CustomTextfield extends StatefulWidget {
-  final TextEditingController controller;
+  final TextFieldBloc<dynamic> textFieldBloc;
   final String labelText, hintText;
   final TextInputAction? textInputAction;
   bool? obscureText;
@@ -13,7 +14,7 @@ class CustomTextfield extends StatefulWidget {
   final TextInputType? keyboardType;
   CustomTextfield({
     super.key,
-    required this.controller,
+    required this.textFieldBloc,
     required this.labelText,
     required this.hintText,
     this.textInputAction,
@@ -31,8 +32,8 @@ class CustomTextfield extends StatefulWidget {
 class _CustomTextfieldState extends State<CustomTextfield> {
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: widget.controller,
+    return TextFieldBlocBuilder(
+      textFieldBloc: widget.textFieldBloc,
       textInputAction: widget.textInputAction,
       obscureText: widget.obscureText!,
       maxLines: widget.maxLines,
