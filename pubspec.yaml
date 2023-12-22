@@ -39,6 +39,11 @@ dependencies:
     git:
       url: https://github.com/Cavin6080/form_bloc.git
       path: packages/flutter_form_bloc
+  fluttertoast: ^8.2.4
+  flutter_localizations:
+    sdk: flutter
+  http: ^1.1.2
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_test:

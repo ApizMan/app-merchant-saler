@@ -5,11 +5,13 @@ class CustomButton extends StatelessWidget {
   final void Function()? onPressed;
   final Widget? icon;
   final Widget? label;
+  final Color? backgroundColor;
   const CustomButton({
     super.key,
     required this.onPressed,
     this.icon = const SizedBox(),
     required this.label,
+    this.backgroundColor = kPrimaryButtonColor,
   });
 
   @override
@@ -20,12 +22,12 @@ class CustomButton extends StatelessWidget {
       label: label!,
       style: ElevatedButton.styleFrom(
         foregroundColor: Colors.white,
-        backgroundColor: kPrimaryButtonColor, // Text color of the button
+        backgroundColor: backgroundColor, // Text color of the button
         elevation: 1, // Elevation of the button
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10), // Border radius
         ),
-        padding: EdgeInsets.all(10), // Padding around the button content
+        padding: const EdgeInsets.all(10), // Padding around the button content
       ),
     );
   }

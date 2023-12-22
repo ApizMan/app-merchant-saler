@@ -1,24 +1,25 @@
-import 'package:app_merchant_saler/screens/screens.dart';
+import 'package:app_merchant_saler/resources/resources.dart';
 import 'package:flutter/material.dart';
+import 'package:app_merchant_saler/screens/screens.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  // Check if the token and merchant ID are stored in SharedPreferences
+  final token = await LoginResources.getToken();
+  final merchantId = await LoginResources.getMerchantId();
 
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  runApp(
+    MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const Login(),
-    );
-  }
+      home: token != null && merchantId != null
+          ? const Dashboard()
+          : const Login(),
+    ),
+  );
 }

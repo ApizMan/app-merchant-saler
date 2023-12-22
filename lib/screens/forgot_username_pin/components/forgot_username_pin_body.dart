@@ -3,6 +3,7 @@ import 'package:app_merchant_saler/form_bloc/forget_username_pin/store_forgot_us
 import 'package:app_merchant_saler/public_components/public_component.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ForgotUsernamePinBody extends StatefulWidget {
   const ForgotUsernamePinBody({super.key});
@@ -34,18 +35,12 @@ class _ForgotUsernamePinBodyState extends State<ForgotUsernamePinBody> {
                   LoadingDialog.hide(context),
               onSuccess: (context, state) {
                 LoadingDialog.hide(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("Reset Successfully"),
-                  ),
-                );
               },
               onFailure: (context, state) {
                 LoadingDialog.hide(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("Merchant ID/Phone Number is wrong"),
-                  ),
+                Fluttertoast.showToast(
+                  msg: 'Merchant ID/Phone Number is wrong',
+                  fontSize: 14,
                 );
               },
               child: Column(
@@ -58,6 +53,7 @@ class _ForgotUsernamePinBodyState extends State<ForgotUsernamePinBody> {
                     hintText: 'Key-in Your Merchant ID at here',
                   ),
                   CustomTextfield(
+                    keyboardType: TextInputType.phone,
                     textFieldBloc: storeForgotUsernamePin!.merchantPhone,
                     labelText: 'Merchant Phone No.',
                     hintText: '+6012345678',

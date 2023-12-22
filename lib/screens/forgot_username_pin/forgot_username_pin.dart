@@ -17,15 +17,16 @@ class ForgotUsernamePin extends StatelessWidget {
 
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
-      title: const Center(
-        child: Text(
-          'Forgot Username/ID',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
+      elevation: 0,
+      scrolledUnderElevation: 0,
+      title: const Text(
+        'Forgot Username/ID',
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
         ),
       ),
+      centerTitle: true,
     );
   }
 }

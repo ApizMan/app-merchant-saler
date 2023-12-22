@@ -9,10 +9,10 @@ class InputValidator {
     return null;
   }
 
-  static String? pin(String nric) {
-    if (nric.length != 6) {
-      return "Must 6 numeric characters";
-    }
-    return null;
-  }
+  // static String? pin(String nric) {
+  //   if (nric.length != 6) {
+  //     return "Must 6 numeric characters";
+  //   }
+  //   return null;
+  // }
 }

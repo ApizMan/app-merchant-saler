@@ -1,8 +1,10 @@
 import 'package:app_merchant_saler/constant.dart';
 import 'package:app_merchant_saler/form_bloc/login/store_login_form_bloc.dart';
 import 'package:app_merchant_saler/public_components/public_component.dart';
+import 'package:app_merchant_saler/screens/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginBody extends StatefulWidget {
   const LoginBody({super.key});
@@ -27,18 +29,18 @@ class _LoginBodyState extends State<LoginBody> {
           onSubmissionFailed: (context, state) => LoadingDialog.hide(context),
           onSuccess: (context, state) {
             LoadingDialog.hide(context);
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text("Login Successfully"),
-              ),
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => const Dashboard()));
+            Fluttertoast.showToast(
+              msg: state.successResponse!,
+              fontSize: 14,
             );
           },
           onFailure: (context, state) {
             LoadingDialog.hide(context);
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text("Username/Pin is wrong"),
-              ),
+            Fluttertoast.showToast(
+              msg: 'Username/Pin is wrong',
+              fontSize: 14,
             );
           },
           child: Column(

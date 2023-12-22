@@ -26,5 +26,7 @@ class StoreForgotUsernamePin extends FormBloc<String, String> {
   }
 
   @override
-  FutureOr<void> onSubmitting() {}
+  FutureOr<void> onSubmitting() {
+    emitSuccess(successResponse: "Reset Successfully");
+  }
 }
