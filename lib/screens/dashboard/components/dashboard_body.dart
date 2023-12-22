@@ -1,5 +1,6 @@
 import 'package:app_merchant_saler/constant.dart';
 import 'package:app_merchant_saler/public_components/public_component.dart';
+import 'package:app_merchant_saler/resources/resources.dart';
 import 'package:app_merchant_saler/screens/screens.dart';
 import 'package:flutter/material.dart';
 
@@ -67,7 +68,20 @@ class _DashboardBodyState extends State<DashboardBody> {
         ),
         Space(height: 20.0),
         Expanded(
-          child: _buildTable(context),
+          child: FutureBuilder(
+              future: DashboardResources.merchantRedeemed(
+                prefix: 'merchant-redeemed',
+              ),
+              builder: (context, redeem) {
+                if (redeem.connectionState == ConnectionState.waiting) {
+                  return const SizedBox();
+                } else if (redeem.hasError) {
+                  return Text('Error: ${redeem.error}');
+                } else {
+                  List<dynamic> redeemedList = redeem.data['merchant_redeemed'];
+                  return _buildTable(context, redeemedList);
+                }
+              }),
         ),
       ],
     );
@@ -160,7 +174,7 @@ class _DashboardBodyState extends State<DashboardBody> {
     );
   }
 
-  Widget _buildTable(BuildContext context) {
+  Widget _buildTable(BuildContext context, List<dynamic> redeemedList) {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -195,18 +209,14 @@ class _DashboardBodyState extends State<DashboardBody> {
                 ),
                 children: _topTable(context),
               ),
-              ...List.generate(
-                5,
-                (index) {
-                  return TableRow(
-                    decoration: const BoxDecoration(
-                      color: kWhiteColor,
-                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                    ),
-                    children: _tableBody(context, index),
-                  );
-                },
-              ),
+              for (var redeemedItem in redeemedList)
+                TableRow(
+                  decoration: const BoxDecoration(
+                    color: kWhiteColor,
+                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                  ),
+                  children: _tableBody(context, redeemedItem),
+                ),
             ],
           ),
         ),
@@ -259,7 +269,8 @@ class _DashboardBodyState extends State<DashboardBody> {
     ];
   }
 
-  List<Widget> _tableBody(BuildContext context, int index) {
+  List<Widget> _tableBody(
+      BuildContext context, Map<String, dynamic> redeemedItem) {
     return [
       TableCell(
         verticalAlignment: TableCellVerticalAlignment.middle,
@@ -270,8 +281,9 @@ class _DashboardBodyState extends State<DashboardBody> {
               height: 10.0,
             ),
             Text(
-              date[index],
+              redeemedItem['usage_date'],
               textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 14),
             ),
           ],
         ),
@@ -285,8 +297,9 @@ class _DashboardBodyState extends State<DashboardBody> {
               height: 10.0,
             ),
             Text(
-              code[index],
+              redeemedItem['couponcode'],
               textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 12),
             ),
           ],
         ),
@@ -300,8 +313,9 @@ class _DashboardBodyState extends State<DashboardBody> {
               height: 10.0,
             ),
             Text(
-              type[index],
+              redeemedItem['cs_name'],
               textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 14),
             ),
           ],
         ),
@@ -315,8 +329,9 @@ class _DashboardBodyState extends State<DashboardBody> {
               height: 10.0,
             ),
             Text(
-              "RM $index",
+              "RM ${redeemedItem['cs_value']}",
               textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 14),
             ),
           ],
         ),

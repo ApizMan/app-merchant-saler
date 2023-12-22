@@ -26,4 +26,9 @@ class LoginResources {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(keyMerchantId);
   }
+
+  static Future<int?> getMerchantSeq() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(keyMerchantSeq);
+  }
 }

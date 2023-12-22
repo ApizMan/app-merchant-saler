@@ -8,6 +8,14 @@ void main() async {
   // Check if the token and merchant ID are stored in SharedPreferences
   final token = await LoginResources.getToken();
   final merchantId = await LoginResources.getMerchantId();
+  final merchantSeq = await LoginResources.getMerchantSeq();
+
+  // Check if all values are not null before printing
+  if (token != null && merchantId != null && merchantSeq != null) {
+    print("Token: $token");
+    print("Merchant ID: $merchantId");
+    print("Merchant Sequence: $merchantSeq");
+  }
 
   runApp(
     MaterialApp(

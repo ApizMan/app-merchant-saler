@@ -11,3 +11,4 @@ const kRedColor = Colors.red;
 
   const String keyToken = 'token';
   const String keyMerchantId = 'merchantid';
+  const String keyMerchantSeq = 'merchant_seq';

@@ -53,15 +53,16 @@ class StoreLoginFormBloc extends FormBloc<String, String> {
 
     // Inside the onSubmitting method
     final response = await LoginResources.loginToken(
-        prefix: 'login',
-        body: {
-          "merchantid": loginModel.merchantId,
-          "merchant_pin": loginModel.merchantPin,
-          "device_name": loginModel.deviceName,
-        },
-      );
+      prefix: 'login',
+      body: {
+        "merchantid": loginModel.merchantId,
+        "merchant_pin": loginModel.merchantPin,
+        "device_name": loginModel.deviceName,
+      },
+    );
 
-      LoginErrorResources validationResult = LoginErrorResources.fromJson(response);
+    LoginErrorResources validationResult =
+        LoginErrorResources.fromJson(response);
 
     if (validationResult.errors.isNotEmpty) {
       // Handle validation errors, for example, you can emit an error state
@@ -69,7 +70,11 @@ class StoreLoginFormBloc extends FormBloc<String, String> {
     } else {
       // No validation errors, proceed with success
       emitSuccess(successResponse: "Successfully Login");
-      SharedPreferencesHelper.saveTokenAndMerchantId(response['token'], response['merchantid']);
+      SharedPreferencesHelper.saveTokenAndMerchantId(
+        response['token'],
+        response['merchantid'],
+        response['merchant_seq'],
+      );
     }
   }
 }
