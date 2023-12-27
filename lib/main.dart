@@ -1,4 +1,6 @@
+import 'package:app_merchant_saler/public_components/custom_month_year_picker/month_year_picker.dart';
 import 'package:app_merchant_saler/resources/resources.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:app_merchant_saler/screens/screens.dart';
 
@@ -12,9 +14,11 @@ void main() async {
 
   // Check if all values are not null before printing
   if (token != null && merchantId != null && merchantSeq != null) {
-    print("Token: $token");
-    print("Merchant ID: $merchantId");
-    print("Merchant Sequence: $merchantSeq");
+    if (kDebugMode) {
+      print("Token: $token");
+      print("Merchant ID: $merchantId");
+      print("Merchant Sequence: $merchantSeq");
+    }
   }
 
   runApp(
@@ -28,6 +32,9 @@ void main() async {
       home: token != null && merchantId != null
           ? const Dashboard()
           : const Login(),
+      localizationsDelegates: const [
+        MonthYearPickerLocalizations.delegate,
+      ],
     ),
   );
 }

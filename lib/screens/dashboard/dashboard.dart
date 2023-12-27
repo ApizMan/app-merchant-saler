@@ -5,6 +5,7 @@ import 'package:app_merchant_saler/public_components/public_component.dart';
 import 'package:app_merchant_saler/screens/dashboard/components/dashboard_body.dart';
 import 'package:app_merchant_saler/screens/screens.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class Dashboard extends StatefulWidget {
@@ -16,6 +17,7 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   DateTime timeBackPressed = DateTime.now();
+  String qrCode = 'unknown';
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +76,8 @@ class _DashboardState extends State<Dashboard> {
                               setState(() {
                                 Navigator.of(context).pushReplacement(
                                     MaterialPageRoute(
-                                        builder: (context) => const Dashboard()));
+                                        builder: (context) =>
+                                            const Dashboard()));
                               });
                             },
                             icon: Column(
@@ -100,7 +103,7 @@ class _DashboardState extends State<Dashboard> {
                         ),
                         Expanded(
                           child: GestureDetector(
-                            onTap: () {},
+                            onTap: () => scanQRCode(context),
                             child: const CircleAvatar(
                               backgroundColor: kPrimaryColor,
                               maxRadius: 50,
@@ -150,5 +153,24 @@ class _DashboardState extends State<Dashboard> {
         ),
       ),
     );
+  }
+
+  Future<void> scanQRCode(BuildContext context) async {
+    try {
+      final qrCode = await FlutterBarcodeScanner.scanBarcode(
+        '#ff6666',
+        'Cancel',
+        true,
+        ScanMode.QR,
+      );
+
+      if (!mounted) return;
+
+      setState(() {
+        this.qrCode = qrCode;
+      });
+    } catch (e) {
+      e.toString();
+    }
   }
 }

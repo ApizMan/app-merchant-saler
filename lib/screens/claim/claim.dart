@@ -1,5 +1,7 @@
+import 'package:app_merchant_saler/constant.dart';
 import 'package:app_merchant_saler/public_components/public_component.dart';
 import 'package:app_merchant_saler/screens/claim/components/claim_body.dart';
+import 'package:app_merchant_saler/screens/claim/components/download_generate.dart';
 import 'package:flutter/material.dart';
 
 class Claim extends StatelessWidget {
@@ -11,6 +13,37 @@ class Claim extends StatelessWidget {
       appBar: _buildAppBar(context),
       body: const CustomBackgroundScreen(
         child: ClaimBody(),
+      ),
+      bottomNavigationBar: Container(
+        decoration: const BoxDecoration(
+          color: kPrimaryColor,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+          child: SizedBox(
+            width: double.infinity,
+            child: CustomButton(
+              onPressed: () async {
+                try {
+                  final pdfFile = await DownloadGenerate.generateTable();
+
+                  DownloadGenerate.openFile(pdfFile);
+                } catch (e) {
+                  e.toString();
+                }
+              },
+              backgroundColor: kPrimaryButtonColor,
+              label: const Text(
+                "Download Report",
+                style: TextStyle(
+                  color: kWhiteColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

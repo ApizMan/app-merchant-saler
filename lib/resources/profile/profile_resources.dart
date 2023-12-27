@@ -10,16 +10,19 @@ class ProfileResources {
     required Object body,
     required String merchantSeq,
   }) async {
-    final token = await ProfileResources.getToken();
-    var response = await http.put(
-      Uri.parse('$baseURL$prefix/$merchantSeq'),
-      body: body,
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-      },
-    );
-    return json.decode(response.body);
+    try {
+      final token = await ProfileResources.getToken();
+      var response = await http.put(
+        Uri.parse('$baseURL$prefix/$merchantSeq'),
+        body: body,
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+      return json.decode(response.body);
+    } catch (e) {
+      e.toString();
+    }
   }
 
   // Share Preferences
