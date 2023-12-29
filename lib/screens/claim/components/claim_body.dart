@@ -1,6 +1,7 @@
 import 'package:app_merchant_saler/constant.dart';
 import 'package:app_merchant_saler/public_components/custom_month_year_picker/month_year_picker.dart';
 import 'package:app_merchant_saler/public_components/public_component.dart';
+import 'package:app_merchant_saler/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -38,7 +39,21 @@ class _ClaimBodyState extends State<ClaimBody> {
           Space(
             height: 20.0,
           ),
-          _buildTable(context),
+          FutureBuilder(
+            future: DashboardResources.merchantRedeemed(
+              prefix: 'merchant-redeemed',
+            ),
+            builder: (context, redeem) {
+              if (redeem.connectionState == ConnectionState.waiting) {
+                return const SizedBox();
+              } else if (redeem.hasError) {
+                return Text('Error: ${redeem.error}');
+              } else {
+                List<dynamic> redeemedList = redeem.data['merchant_redeemed'];
+                return _buildTable(context, redeemedList);
+              }
+            },
+          ),
         ],
       ),
     );
@@ -118,7 +133,7 @@ class _ClaimBodyState extends State<ClaimBody> {
     );
   }
 
-  Widget _buildTable(BuildContext context) {
+  Widget _buildTable(BuildContext context, List<dynamic> redeemedList) {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -153,13 +168,14 @@ class _ClaimBodyState extends State<ClaimBody> {
                 ),
                 children: _topTable(context),
               ),
-              TableRow(
-                decoration: const BoxDecoration(
-                  color: kWhiteColor,
-                  borderRadius: BorderRadius.all(Radius.circular(20.0)),
+              for (var redeemedItem in redeemedList)
+                TableRow(
+                  decoration: const BoxDecoration(
+                    color: kWhiteColor,
+                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                  ),
+                  children: _tableBody(context, redeemedItem),
                 ),
-                children: _tableBody(context),
-              ),
             ],
           ),
         ),
@@ -212,7 +228,8 @@ class _ClaimBodyState extends State<ClaimBody> {
     ];
   }
 
-  List<Widget> _tableBody(BuildContext context) {
+  List<Widget> _tableBody(
+      BuildContext context, Map<String, dynamic> redeemedItem) {
     return [
       TableCell(
         verticalAlignment: TableCellVerticalAlignment.middle,
@@ -223,7 +240,7 @@ class _ClaimBodyState extends State<ClaimBody> {
               height: 10.0,
             ),
             Text(
-              'usage_date',
+              redeemedItem['usage_date'],
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 14),
             ),
@@ -239,7 +256,7 @@ class _ClaimBodyState extends State<ClaimBody> {
               height: 10.0,
             ),
             Text(
-              'couponcode',
+              redeemedItem['couponcode'],
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 12),
             ),
@@ -255,7 +272,7 @@ class _ClaimBodyState extends State<ClaimBody> {
               height: 10.0,
             ),
             Text(
-              'cs_name',
+              redeemedItem['cs_name'],
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 14),
             ),
@@ -271,7 +288,7 @@ class _ClaimBodyState extends State<ClaimBody> {
               height: 10.0,
             ),
             Text(
-              "RM ",
+              "RM ${redeemedItem['cs_value']}",
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 14),
             ),

@@ -1,7 +1,7 @@
 import 'package:app_merchant_saler/constant.dart';
 import 'package:app_merchant_saler/public_components/public_component.dart';
 import 'package:app_merchant_saler/screens/claim/components/claim_body.dart';
-import 'package:app_merchant_saler/screens/claim/components/download_generate.dart';
+import 'package:app_merchant_saler/screens/screens.dart';
 import 'package:flutter/material.dart';
 
 class Claim extends StatelessWidget {
@@ -23,14 +23,12 @@ class Claim extends StatelessWidget {
           child: SizedBox(
             width: double.infinity,
             child: CustomButton(
-              onPressed: () async {
-                try {
-                  final pdfFile = await DownloadGenerate.generateTable();
-
-                  DownloadGenerate.openFile(pdfFile);
-                } catch (e) {
-                  e.toString();
-                }
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const PdfPage(),
+                  ),
+                );
               },
               backgroundColor: kPrimaryButtonColor,
               label: const Text(
