@@ -1,12 +1,15 @@
 import 'package:app_merchant_saler/constant.dart';
 import 'package:app_merchant_saler/public_components/custom_month_year_picker/month_year_picker.dart';
 import 'package:app_merchant_saler/public_components/public_component.dart';
-import 'package:app_merchant_saler/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class ClaimBody extends StatefulWidget {
-  const ClaimBody({Key? key}) : super(key: key);
+  final List<dynamic> redeemedList;
+  const ClaimBody({
+    Key? key,
+    required this.redeemedList,
+  }) : super(key: key);
 
   @override
   State<ClaimBody> createState() => _ClaimBodyState();
@@ -15,11 +18,13 @@ class ClaimBody extends StatefulWidget {
 class _ClaimBodyState extends State<ClaimBody> {
   DateTime? _selected;
   TextEditingController monthPicker = TextEditingController();
+  List<dynamic> filteredRedeemedList = [];
 
   @override
   void initState() {
     super.initState();
     _updateMonthYearText();
+    _filterRedeemedList();
   }
 
   void _updateMonthYearText() {
@@ -27,6 +32,16 @@ class _ClaimBodyState extends State<ClaimBody> {
         ? DateFormat().add_yM().format(_selected!)
         : 'Selected Filter';
     monthPicker.text = monthYear;
+  }
+
+  void _filterRedeemedList() {
+    filteredRedeemedList = widget.redeemedList
+        .where((redeemedItem) =>
+            _selected == null ||
+            DateFormat('MM/yyyy')
+                    .format(DateTime.parse(redeemedItem['usage_date'])) ==
+                DateFormat('MM/yyyy').format(_selected!))
+        .toList();
   }
 
   @override
@@ -39,21 +54,7 @@ class _ClaimBodyState extends State<ClaimBody> {
           Space(
             height: 20.0,
           ),
-          FutureBuilder(
-            future: DashboardResources.merchantRedeemed(
-              prefix: 'merchant-redeemed',
-            ),
-            builder: (context, redeem) {
-              if (redeem.connectionState == ConnectionState.waiting) {
-                return const SizedBox();
-              } else if (redeem.hasError) {
-                return Text('Error: ${redeem.error}');
-              } else {
-                List<dynamic> redeemedList = redeem.data['merchant_redeemed'];
-                return _buildTable(context, redeemedList);
-              }
-            },
-          ),
+          _buildTable(context, widget.redeemedList),
         ],
       ),
     );
@@ -75,6 +76,7 @@ class _ClaimBodyState extends State<ClaimBody> {
       setState(() {
         _selected = selected;
         _updateMonthYearText();
+        _filterRedeemedList();
       });
     }
   }
@@ -105,6 +107,7 @@ class _ClaimBodyState extends State<ClaimBody> {
                       setState(() {
                         _selected = null;
                         _updateMonthYearText();
+                        _filterRedeemedList();
                       });
                     },
                   )
@@ -168,7 +171,7 @@ class _ClaimBodyState extends State<ClaimBody> {
                 ),
                 children: _topTable(context),
               ),
-              for (var redeemedItem in redeemedList)
+              for (var redeemedItem in filteredRedeemedList)
                 TableRow(
                   decoration: const BoxDecoration(
                     color: kWhiteColor,
@@ -242,7 +245,7 @@ class _ClaimBodyState extends State<ClaimBody> {
             Text(
               redeemedItem['usage_date'],
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14),
+              style: const TextStyle(fontSize: 14),
             ),
           ],
         ),
@@ -258,7 +261,7 @@ class _ClaimBodyState extends State<ClaimBody> {
             Text(
               redeemedItem['couponcode'],
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 12),
+              style: const TextStyle(fontSize: 12),
             ),
           ],
         ),
@@ -274,7 +277,7 @@ class _ClaimBodyState extends State<ClaimBody> {
             Text(
               redeemedItem['cs_name'],
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14),
+              style: const TextStyle(fontSize: 14),
             ),
           ],
         ),
@@ -290,7 +293,7 @@ class _ClaimBodyState extends State<ClaimBody> {
             Text(
               "RM ${redeemedItem['cs_value']}",
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14),
+              style: const TextStyle(fontSize: 14),
             ),
           ],
         ),

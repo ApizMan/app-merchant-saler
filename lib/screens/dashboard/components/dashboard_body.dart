@@ -283,7 +283,7 @@ class _DashboardBodyState extends State<DashboardBody> {
             Text(
               redeemedItem['usage_date'],
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14),
+              style: const TextStyle(fontSize: 14),
             ),
           ],
         ),
@@ -299,7 +299,7 @@ class _DashboardBodyState extends State<DashboardBody> {
             Text(
               redeemedItem['couponcode'],
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 12),
+              style: const TextStyle(fontSize: 12),
             ),
           ],
         ),
@@ -315,7 +315,7 @@ class _DashboardBodyState extends State<DashboardBody> {
             Text(
               redeemedItem['cs_name'],
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14),
+              style: const TextStyle(fontSize: 14),
             ),
           ],
         ),
@@ -331,7 +331,7 @@ class _DashboardBodyState extends State<DashboardBody> {
             Text(
               "RM ${redeemedItem['cs_value']}",
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14),
+              style: const TextStyle(fontSize: 14),
             ),
           ],
         ),

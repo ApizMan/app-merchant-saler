@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app_merchant_saler/util/category.dart';
 import 'package:app_merchant_saler/util/url_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,7 +11,8 @@ import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 import 'package:pdf/widgets.dart' as pw;
 
-Future<Uint8List> generatePdf(final PdfPageFormat format) async {
+Future<Uint8List> generatePdf(
+    final PdfPageFormat format, List<dynamic> redeemedList) async {
   final doc = pw.Document(
     title: 'Flutter School',
   );
@@ -85,7 +87,7 @@ Future<Uint8List> generatePdf(final PdfPageFormat format) async {
         ),
         pw.Center(
           child: pw.Text(
-            'Print Table',
+            'Generate Report',
             textAlign: pw.TextAlign.center,
             style: pw.TextStyle(
               font: ttf,
@@ -96,8 +98,12 @@ Future<Uint8List> generatePdf(final PdfPageFormat format) async {
         ),
         pw.Align(
           alignment: pw.Alignment.centerLeft,
-          child: pw.Text(''), /**Sambung sini nanti */
+          child: Category(
+            title: 'This Month',
+            font: ttf,
+          ),
         ),
+        _buildTableWidget(redeemedList), // Add this line for the table
       ],
     ),
   );
@@ -160,5 +166,74 @@ void showSharedToast(final BuildContext context) {
   Fluttertoast.showToast(
     msg: 'Document Shared Successfully',
     fontSize: 14,
+  );
+}
+
+// New method to create a table
+pw.Widget _buildTableWidget(List<dynamic> redeemedList) {
+  return pw.Table(
+    border: pw.TableBorder.all(color: const PdfColor.fromInt(0xff000000)),
+    defaultVerticalAlignment: pw.TableCellVerticalAlignment.middle,
+    children: [
+      // Top row of the table
+      pw.TableRow(
+        children: [
+          pw.Container(
+            padding: const pw.EdgeInsets.all(8.0),
+            child: pw.Text("Date", textAlign: pw.TextAlign.center),
+          ),
+          pw.Container(
+            padding: const pw.EdgeInsets.all(8.0),
+            child: pw.Text("Code", textAlign: pw.TextAlign.center),
+          ),
+          pw.Container(
+            padding: const pw.EdgeInsets.all(8.0),
+            child: pw.Text("Type", textAlign: pw.TextAlign.center),
+          ),
+          pw.Container(
+            padding: const pw.EdgeInsets.all(8.0),
+            child: pw.Text("Value", textAlign: pw.TextAlign.center),
+          ),
+        ],
+      ),
+      // Data rows
+      for (var redeemedItem in redeemedList)
+        pw.TableRow(
+          children: [
+            pw.Container(
+              padding: const pw.EdgeInsets.all(8.0),
+              child: pw.Text(
+                redeemedItem['usage_date'],
+                textAlign: pw.TextAlign.center,
+                style: const pw.TextStyle(fontSize: 14),
+              ),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(8.0),
+              child: pw.Text(
+                redeemedItem['couponcode'],
+                textAlign: pw.TextAlign.center,
+                style: const pw.TextStyle(fontSize: 12),
+              ),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(8.0),
+              child: pw.Text(
+                redeemedItem['cs_name'],
+                textAlign: pw.TextAlign.center,
+                style: const pw.TextStyle(fontSize: 14),
+              ),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.all(8.0),
+              child: pw.Text(
+                "RM ${redeemedItem['cs_value']}",
+                textAlign: pw.TextAlign.center,
+                style: const pw.TextStyle(fontSize: 14),
+              ),
+            ),
+          ],
+        ),
+    ],
   );
 }

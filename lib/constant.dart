@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const baseURL = 'http://10.21.12.97:8000/api/';
+const baseURL = 'http://10.21.12.150:8000/api/';
 
 const kPrimaryColor = Color.fromRGBO(59, 214, 204, 1);
 const kWhiteColor = Colors.white;
@@ -9,6 +9,6 @@ const kBlack = Colors.black;
 const kPrimaryButtonColor = Color.fromRGBO(67, 56, 202, 1);
 const kRedColor = Colors.red;
 
-  const String keyToken = 'token';
-  const String keyMerchantId = 'merchantid';
-  const String keyMerchantSeq = 'merchant_seq';
+const String keyToken = 'token';
+const String keyMerchantId = 'merchantid';
+const String keyMerchantSeq = 'merchant_seq';

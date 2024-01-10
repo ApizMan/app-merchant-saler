@@ -1,10 +1,15 @@
 import 'package:app_merchant_saler/util/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 
 class PdfPage extends StatefulWidget {
-  const PdfPage({super.key});
+  final List<dynamic> redeemedList;
+  const PdfPage({
+    super.key,
+    required this.redeemedList,
+  });
 
   @override
   State<PdfPage> createState() => _PdfPageState();
@@ -37,14 +42,14 @@ class _PdfPageState extends State<PdfPage> {
     ];
     return Scaffold(
       appBar: AppBar(
-        title: Text('Flutter PDF'),
+        title: const Text('Flutter PDF'),
       ),
       body: PdfPreview(
         maxPageWidth: 700,
         actions: actions,
         onPrinted: showPrintedToast,
         onShared: showSharedToast,
-        build: generatePdf,
+        build: (PdfPageFormat format) => generatePdf(format, widget.redeemedList),
       ),
     );
   }

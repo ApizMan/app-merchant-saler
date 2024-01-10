@@ -6,7 +6,7 @@ import 'package:app_merchant_saler/resources/resources.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 
 class StoreProfileFormBloc extends FormBloc<String, String> {
-  final MerchantSeqModel merchantSeqModel = MerchantSeqModel();
+  final MerchantSeqModel merchantSeqModel;
 
   final name = TextFieldBloc(
     validators: [
@@ -32,7 +32,11 @@ class StoreProfileFormBloc extends FormBloc<String, String> {
     ],
   );
 
-  StoreProfileFormBloc() {
+  StoreProfileFormBloc({required this.merchantSeqModel}) {
+    name.updateValue(merchantSeqModel.merchantPic!);
+    phoneNum.updateValue(merchantSeqModel.merchantContact!);
+    email.updateValue(merchantSeqModel.merchantEmail!);
+    address.updateValue(merchantSeqModel.merchantAddress!);
     addFieldBlocs(
       fieldBlocs: [
         name,
@@ -47,19 +51,22 @@ class StoreProfileFormBloc extends FormBloc<String, String> {
   FutureOr<void> onSubmitting() async {
     merchantSeqModel.merchantContact = phoneNum.value;
     merchantSeqModel.merchantAddress = address.value;
-    merchantSeqModel.merchantName = name.value;
-    merchantSeqModel.merchantEmail = email.value;
-
-    final merchantSeq = await LoginResources.getMerchantSeq();
+    merchantSeqModel.merchantPic = name.value;
+    if (merchantSeqModel.merchantEmail == email.value) {
+      emitFailure(
+          failureResponse: 'The merchant email has already been taken.');
+      return;
+    } else {
+      merchantSeqModel.merchantEmail = email.value;
+    }
 
     // Inside the onSubmitting method
     final response = await ProfileResources.updateProfile(
       prefix: 'merchant-update-info',
-      merchantSeq: merchantSeq.toString(),
       body: {
         "merchant_contact": merchantSeqModel.merchantContact.toString(),
         "merchant_address": merchantSeqModel.merchantAddress.toString(),
-        "merchant_pic": merchantSeqModel.merchantName.toString(),
+        "merchant_pic": merchantSeqModel.merchantPic.toString(),
         "merchant_email": merchantSeqModel.merchantEmail.toString(),
       },
     );

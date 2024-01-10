@@ -159,6 +159,7 @@ class _MonthYearPickerDialogState extends State<MonthYearPickerDialog> {
     final textTheme = theme.textTheme;
     // Constrain the textScaleFactor to the largest supported value to prevent
     // layout issues.
+    // ignore: deprecated_member_use
     final textScaleFactor = math.min(media.textScaleFactor, 1.3);
     final direction = Directionality.of(context);
 

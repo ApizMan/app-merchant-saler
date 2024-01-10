@@ -8,13 +8,31 @@ class ProfileResources {
   static Future updateProfile({
     required String prefix,
     required Object body,
-    required String merchantSeq,
   }) async {
     try {
       final token = await ProfileResources.getToken();
+      final seq = await ProfileResources.getMarchSeq();
       var response = await http.put(
-        Uri.parse('$baseURL$prefix/$merchantSeq'),
+        Uri.parse('$baseURL$prefix/$seq'),
         body: body,
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+      return json.decode(response.body);
+    } catch (e) {
+      e.toString();
+    }
+  }
+
+  static Future getProfile({
+    required String prefix,
+  }) async {
+    try {
+      final token = await ProfileResources.getToken();
+      final seq = await ProfileResources.getMarchSeq();
+      var response = await http.get(
+        Uri.parse('$baseURL$prefix/$seq'),
         headers: {
           'Authorization': 'Bearer $token',
         },
@@ -29,5 +47,10 @@ class ProfileResources {
   static Future<String?> getToken() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(keyToken);
+  }
+
+  static Future<int?> getMarchSeq() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(keyMerchantSeq);
   }
 }
