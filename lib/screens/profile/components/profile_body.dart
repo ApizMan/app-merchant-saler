@@ -1,5 +1,6 @@
 import 'package:app_merchant_saler/constant.dart';
 import 'package:app_merchant_saler/form_bloc/profile/store_profile_form_bloc.dart';
+import 'package:app_merchant_saler/helpers/share_preferences_helper.dart';
 import 'package:app_merchant_saler/models/merchant_seq_model.dart';
 import 'package:app_merchant_saler/public_components/public_component.dart';
 import 'package:app_merchant_saler/resources/resources.dart';
@@ -35,6 +36,10 @@ class _ProfileBodyState extends State<ProfileBody> {
               builder: (context) {
                 storeProfileFormBloc =
                     BlocProvider.of<StoreProfileFormBloc>(context);
+
+                SharedPreferencesHelper.saveMerchantName(
+                  profile.data['user']['merchant_name'] ?? "",
+                );
 
                 return FormBlocListener<StoreProfileFormBloc, String, String>(
                   onSubmitting: (context, state) {

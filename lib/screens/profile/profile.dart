@@ -1,8 +1,10 @@
 import 'package:app_merchant_saler/constant.dart';
 import 'package:app_merchant_saler/public_components/public_component.dart';
+import 'package:app_merchant_saler/resources/resources.dart';
 import 'package:app_merchant_saler/screens/profile/components/profile_body.dart';
 import 'package:app_merchant_saler/screens/screens.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Profile extends StatelessWidget {
   const Profile({super.key});
@@ -23,10 +25,18 @@ class Profile extends StatelessWidget {
           child: SizedBox(
             width: double.infinity,
             child: CustomButton(
-              onPressed: () {
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => const Login()),
-                    (route) => false);
+              onPressed: () async {
+                LoginResources.logout(prefix: 'logout').then(
+                  (value) => Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Login(),
+                    ),
+                  ),
+                );
+                final SharedPreferences prefs =
+                    await SharedPreferences.getInstance();
+                prefs.clear();
               },
               backgroundColor: kRedColor,
               label: const Text(

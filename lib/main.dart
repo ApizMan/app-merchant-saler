@@ -11,6 +11,7 @@ void main() async {
   final token = await LoginResources.getToken();
   final merchantId = await LoginResources.getMerchantId();
   final merchantSeq = await LoginResources.getMerchantSeq();
+  final merchantName = await LoginResources.getMerchantName();
 
   // Check if all values are not null before printing
   if (token != null && merchantId != null && merchantSeq != null) {
@@ -18,6 +19,7 @@ void main() async {
       print("Token: $token");
       print("Merchant ID: $merchantId");
       print("Merchant Sequence: $merchantSeq");
+      print("Merchant Name: $merchantName");
     }
   }
 

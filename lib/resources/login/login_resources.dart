@@ -16,6 +16,19 @@ class LoginResources {
     return json.decode(response.body);
   }
 
+  static Future logout({
+    required String prefix,
+  }) async {
+    final token = await LoginResources.getToken();
+    var response = await http.post(
+      Uri.parse('$baseURL$prefix'),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+    return json.decode(response.body);
+  }
+
 // Share Preferences
   static Future<String?> getToken() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -30,5 +43,10 @@ class LoginResources {
   static Future<int?> getMerchantSeq() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getInt(keyMerchantSeq);
+  }
+
+  static Future<String?> getMerchantName() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(keyMerchantName);
   }
 }

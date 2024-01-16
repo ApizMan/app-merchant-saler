@@ -1,11 +1,11 @@
-class ProfileErrorResources {
+class CouponQrErrorResources {
   String message;
   Map<String, List<String>> errors;
 
-  ProfileErrorResources({required this.message, required this.errors});
+  CouponQrErrorResources({required this.message, required this.errors});
 
-  factory ProfileErrorResources.fromJson(Map<String, dynamic> json) {
-    return ProfileErrorResources(
+  factory CouponQrErrorResources.fromJson(Map<String, dynamic> json) {
+    return CouponQrErrorResources(
       message: json['message'] ?? '',
       errors: (json['errors'] as Map<String, dynamic>?)
               ?.map((key, value) => MapEntry(key, (value as List<dynamic>).cast<String>())) ??
@@ -15,6 +15,6 @@ class ProfileErrorResources {
 
   @override
   String toString() {
-    return 'ProfileValidationResult{message: $message, errors: $errors}';
+    return 'CouponValidationResult{message: $message, errors: $errors}';
   }
 }

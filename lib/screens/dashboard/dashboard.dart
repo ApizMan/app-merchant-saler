@@ -2,8 +2,11 @@ import 'dart:io';
 
 import 'package:app_merchant_saler/constant.dart';
 import 'package:app_merchant_saler/public_components/public_component.dart';
+import 'package:app_merchant_saler/resources/coupon_qr/coupon_qr_error_resources.dart';
+import 'package:app_merchant_saler/resources/coupon_qr/coupon_qr_resources.dart';
 import 'package:app_merchant_saler/screens/dashboard/components/dashboard_body.dart';
 import 'package:app_merchant_saler/screens/screens.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -169,8 +172,52 @@ class _DashboardState extends State<Dashboard> {
       setState(() {
         this.qrCode = qrCode;
       });
+
+      if (qrCode != '-1') {
+        final response = await CouponQrResources.QRScan(
+          prefix: 'update-coupon-usage',
+          body: {
+            "cm_serial": qrCode,
+          },
+        );
+
+        CouponQrErrorResources validationResult =
+            CouponQrErrorResources.fromJson(response);
+
+        if (validationResult.errors['cm_serial']?.single ==
+            'The selected cm serial is invalid.') {
+          // Handle validation errors, for example, you can emit an error state
+          // ignore: use_build_context_synchronously
+          CustomDialog.show(
+            context,
+            title: "Coupon Already Been Claimed",
+            btnOkText: 'OK',
+            btnOkOnPress: () {
+              Navigator.of(context).pop(); // Close the dialog
+              scanQRCode(context); // Call scanQRCode again if needed
+            },
+          );
+        } else {
+          // No validation errors, proceed with success
+          // ignore: use_build_context_synchronously
+          CustomDialog.show(
+            context,
+            title: "Coupon Successfully Claimed.",
+            btnCancelText: 'Return to Dashboard',
+            btnCancelOnPress: () =>
+                Navigator.of(context).pop(), // Close the dialog,
+            btnOkText: 'Scan New Coupon',
+            btnOkOnPress: () {
+              Navigator.of(context).pop(); // Close the dialog
+              scanQRCode(context); // Call scanQRCode again if needed
+            },
+          );
+        }
+      }
     } catch (e) {
-      e.toString();
+      if (kDebugMode) {
+        print(e.toString());
+      }
     }
   }
 }
