@@ -7,6 +7,7 @@ import 'package:app_merchant_saler/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 class ProfileBody extends StatefulWidget {
   const ProfileBody({super.key});
@@ -62,6 +63,11 @@ class _ProfileBodyState extends State<ProfileBody> {
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
+                        Text(
+                          toBeginningOfSentenceCase(profile.data['user']['merchant_name'].toString())!,
+                          style: TextStyle(
+                              fontSize: 28.0, fontWeight: FontWeight.bold),
+                        ),
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 20.0, vertical: 10.0),

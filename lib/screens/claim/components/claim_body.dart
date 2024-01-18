@@ -1,8 +1,6 @@
 import 'package:app_merchant_saler/constant.dart';
-import 'package:app_merchant_saler/public_components/custom_month_year_picker/month_year_picker.dart';
 import 'package:app_merchant_saler/public_components/public_component.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class ClaimBody extends StatefulWidget {
   final List<dynamic> redeemedList;
@@ -16,123 +14,10 @@ class ClaimBody extends StatefulWidget {
 }
 
 class _ClaimBodyState extends State<ClaimBody> {
-  DateTime? _selected;
-  TextEditingController monthPicker = TextEditingController();
-  List<dynamic> filteredRedeemedList = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _updateMonthYearText();
-    _filterRedeemedList();
-  }
-
-  void _updateMonthYearText() {
-    String monthYear = _selected != null
-        ? DateFormat().add_yM().format(_selected!)
-        : 'Selected Filter';
-    monthPicker.text = monthYear;
-  }
-
-  void _filterRedeemedList() {
-    filteredRedeemedList = widget.redeemedList
-        .where((redeemedItem) =>
-            _selected == null ||
-            DateFormat('MM/yyyy')
-                    .format(DateTime.parse(redeemedItem['usage_date'])) ==
-                DateFormat('MM/yyyy').format(_selected!))
-        .toList();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Column(
-        children: [
-          _buildFilter(context),
-          Space(
-            height: 20.0,
-          ),
-          _buildTable(context, widget.redeemedList),
-        ],
-      ),
-    );
-  }
-
-  Future<void> _onPressed({
-    required BuildContext context,
-    String? locale,
-  }) async {
-    final localeObj = locale != null ? Locale(locale) : null;
-    final selected = await showMonthYearPicker(
-      context: context,
-      initialDate: _selected ?? DateTime.now(),
-      firstDate: DateTime(2019),
-      lastDate: DateTime(2030),
-      locale: localeObj,
-    );
-    if (selected != null) {
-      setState(() {
-        _selected = selected;
-        _updateMonthYearText();
-        _filterRedeemedList();
-      });
-    }
-  }
-
-  Widget _buildFilter(BuildContext context) {
-    return Align(
-      alignment: Alignment.topRight,
-      child: SizedBox(
-        width: 200,
-        child: TextFormField(
-          readOnly: true,
-          controller: monthPicker,
-          onTap: () => _onPressed(context: context),
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: kWhiteColor,
-            prefixIcon: const Icon(
-              Icons.calendar_month,
-              color: kPrimaryColor,
-            ),
-            suffixIcon: _selected != null
-                ? IconButton(
-                    icon: const Icon(
-                      Icons.clear,
-                      color: kPrimaryColor,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _selected = null;
-                        _updateMonthYearText();
-                        _filterRedeemedList();
-                      });
-                    },
-                  )
-                : null,
-            floatingLabelBehavior: _selected != null
-                ? FloatingLabelBehavior.auto
-                : FloatingLabelBehavior.never,
-            labelText: _selected != null ? 'Filter' : 'Selected Filter',
-            labelStyle: const TextStyle(color: kBlack, fontSize: 12),
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-            border: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(15.0)),
-            ),
-            enabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: kPrimaryColor, width: 1.0),
-              borderRadius: BorderRadius.all(Radius.circular(15.0)),
-            ),
-            focusedBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: kPrimaryColor, width: 2.0),
-              borderRadius: BorderRadius.all(Radius.circular(15.0)),
-            ),
-          ),
-        ),
-      ),
+    return Expanded(
+      child: _buildTable(context, widget.redeemedList),
     );
   }
 
@@ -141,7 +26,7 @@ class _ClaimBodyState extends State<ClaimBody> {
       width: double.infinity,
       decoration: BoxDecoration(
         color: kWhiteColor,
-        borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+        borderRadius: const BorderRadius.all(Radius.circular(10.0)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.2),
@@ -171,7 +56,7 @@ class _ClaimBodyState extends State<ClaimBody> {
                 ),
                 children: _topTable(context),
               ),
-              for (var redeemedItem in filteredRedeemedList)
+              for (var redeemedItem in redeemedList)
                 TableRow(
                   decoration: const BoxDecoration(
                     color: kWhiteColor,
@@ -243,7 +128,7 @@ class _ClaimBodyState extends State<ClaimBody> {
               height: 10.0,
             ),
             Text(
-              redeemedItem['usage_date'],
+              redeemedItem['cm_usage_date'],
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 14),
             ),
@@ -259,7 +144,7 @@ class _ClaimBodyState extends State<ClaimBody> {
               height: 10.0,
             ),
             Text(
-              redeemedItem['couponcode'],
+              redeemedItem['cm_coupon_code'],
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 12),
             ),
@@ -291,7 +176,7 @@ class _ClaimBodyState extends State<ClaimBody> {
               height: 10.0,
             ),
             Text(
-              "RM ${redeemedItem['cs_value']}",
+              "RM ${double.parse(redeemedItem['cs_value']).toStringAsFixed(2)}",
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 14),
             ),

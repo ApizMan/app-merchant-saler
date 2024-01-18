@@ -184,8 +184,15 @@ class _DashboardState extends State<Dashboard> {
         CouponQrErrorResources validationResult =
             CouponQrErrorResources.fromJson(response);
 
-        if (validationResult.errors['cm_serial']?.single ==
-            'The selected cm serial is invalid.') {
+        if (validationResult.errors.isNotEmpty) {
+          return Future.delayed(
+            Duration.zero,
+            () => Fluttertoast.showToast(
+                msg: validationResult.errors['cm_serial']!.single),
+          );
+        }
+
+        if (response['message'] == 'Coupon not found or conditions not met') {
           // Handle validation errors, for example, you can emit an error state
           // ignore: use_build_context_synchronously
           CustomDialog.show(
@@ -204,8 +211,11 @@ class _DashboardState extends State<Dashboard> {
             context,
             title: "Coupon Successfully Claimed.",
             btnCancelText: 'Return to Dashboard',
-            btnCancelOnPress: () =>
-                Navigator.of(context).pop(), // Close the dialog,
+            btnCancelOnPress: () => Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => const Dashboard(),
+              ),
+            ), // Close the dialog,
             btnOkText: 'Scan New Coupon',
             btnOkOnPress: () {
               Navigator.of(context).pop(); // Close the dialog

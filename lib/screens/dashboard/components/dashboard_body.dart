@@ -70,7 +70,7 @@ class _DashboardBodyState extends State<DashboardBody> {
         Expanded(
           child: FutureBuilder(
               future: DashboardResources.merchantRedeemed(
-                prefix: 'merchant-redeemed',
+                prefix: 'view-data-redeemed',
               ),
               builder: (context, redeem) {
                 if (redeem.connectionState == ConnectionState.waiting) {
@@ -78,7 +78,7 @@ class _DashboardBodyState extends State<DashboardBody> {
                 } else if (redeem.hasError) {
                   return Text('Error: ${redeem.error}');
                 } else {
-                  List<dynamic> redeemedList = redeem.data['merchant_redeemed'];
+                  List<dynamic> redeemedList = redeem.data ?? [];
                   return _buildTable(context, redeemedList);
                 }
               }),
@@ -109,69 +109,84 @@ class _DashboardBodyState extends State<DashboardBody> {
   }
 
   Widget _buildCard(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          child: Row(
+    return FutureBuilder(
+        future: Future.wait([
+          DashboardResources.totalScanToday(prefix: 'today-redeemed'),
+          DashboardResources.totalValueRedeem(prefix: 'today-value-redeemed'),
+        ]),
+        builder: (context, todayRedeem) {
+          // Assuming that the response for totalScanToday is at index 0
+          var totalRedeem = todayRedeem.data?[0];
+          // Assuming that the response for totalValueRedeem is at index 1
+          var totalCouponValue = todayRedeem.data?[1];
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: CustomCard(
-                  data: const Text(
-                    "Total Scan Today",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: todayRedeem.hasData
+                          ? CustomCard(
+                              data: const Text(
+                                "Total Scan Today",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              value: Text(
+                                totalRedeem.toString(),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 34,
+                                ),
+                              ),
+                              height: sizeCard,
+                              color: kWhiteColor,
+                            )
+                          : const LoadingDialog(),
                     ),
-                  ),
-                  value: const Text(
-                    "3",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 34,
+                    Space(
+                      width: 10.0,
                     ),
-                  ),
-                  height: sizeCard,
-                  color: kWhiteColor,
+                  ],
                 ),
-              ),
-              Space(
-                width: 10.0,
-              ),
-            ],
-          ),
-        ),
-        Expanded(
-          child: Row(
-            children: [
-              Space(
-                width: 10.0,
               ),
               Expanded(
-                child: CustomCard(
-                  data: const Text(
-                    "Total Coupon Value Today",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                child: Row(
+                  children: [
+                    Space(
+                      width: 10.0,
                     ),
-                  ),
-                  value: const Text(
-                    "RM 15",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 34,
+                    Expanded(
+                      child: todayRedeem.hasData
+                          ? CustomCard(
+                              data: const Text(
+                                "Total Coupon Value Today",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              value: Text(
+                                "RM ${totalCouponValue != null ? totalCouponValue.toStringAsFixed(2) : "0.00"}",
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 34,
+                                ),
+                              ),
+                              height: sizeCard,
+                              color: kWhiteColor,
+                            )
+                          : const LoadingDialog(),
                     ),
-                  ),
-                  height: sizeCard,
-                  color: kWhiteColor,
+                  ],
                 ),
               ),
             ],
-          ),
-        ),
-      ],
-    );
+          );
+        });
   }
 
   Widget _buildTable(BuildContext context, List<dynamic> redeemedList) {
@@ -281,7 +296,7 @@ class _DashboardBodyState extends State<DashboardBody> {
               height: 10.0,
             ),
             Text(
-              redeemedItem['usage_date'],
+              redeemedItem['cm_usage_date'],
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 14),
             ),
@@ -297,7 +312,7 @@ class _DashboardBodyState extends State<DashboardBody> {
               height: 10.0,
             ),
             Text(
-              redeemedItem['couponcode'],
+              redeemedItem['cm_coupon_code'],
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 12),
             ),
@@ -329,7 +344,7 @@ class _DashboardBodyState extends State<DashboardBody> {
               height: 10.0,
             ),
             Text(
-              "RM ${redeemedItem['cs_value']}",
+              "RM ${double.parse(redeemedItem['cs_value']).toStringAsFixed(2)}",
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 14),
             ),

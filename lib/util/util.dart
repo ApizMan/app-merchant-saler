@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app_merchant_saler/constant.dart';
 import 'package:app_merchant_saler/util/category.dart';
 import 'package:app_merchant_saler/util/url_text.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,11 @@ import 'package:printing/printing.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 Future<Uint8List> generatePdf(
-    final PdfPageFormat format, List<dynamic> redeemedList) async {
+  final PdfPageFormat format,
+  List<dynamic> redeemedList,
+  Map<String, dynamic> profile,
+  String filter,
+) async {
   final doc = pw.Document(
     title: 'Flutter School',
   );
@@ -52,13 +57,16 @@ Future<Uint8List> generatePdf(
                     crossAxisAlignment: pw.CrossAxisAlignment.end,
                     children: [
                       pw.Text(
-                        'Phone : ',
+                        'Merchant Name: ',
+                      ),
+                      pw.Text(
+                        'PIC Name: ',
+                      ),
+                      pw.Text(
+                        'Phone: ',
                       ),
                       pw.Text(
                         'Email: ',
-                      ),
-                      pw.Text(
-                        'Instagram: ',
                       ),
                     ],
                   ),
@@ -66,14 +74,16 @@ Future<Uint8List> generatePdf(
                   pw.Column(
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
-                      pw.Text('0012 340 06789'),
-                      UrlText('myFLutterSchool', 'myFlutterSchool@gmail.com'),
-                      UrlText('flutter tutorial', '@flutter_tutorial'),
+                      pw.Text(profile['merchant_name']!),
+                      pw.Text(profile['merchant_pic']!),
+                      pw.Text(profile['merchant_contact']!),
+                      UrlText(
+                          profile['merchant_email'], profile['merchant_email']),
                     ],
                   ),
                   pw.SizedBox(width: 70),
                   pw.BarcodeWidget(
-                    data: 'Flutter School',
+                    data: profile['merchant_email'],
                     width: 40,
                     height: 40,
                     barcode: pw.Barcode.qrCode(),
@@ -99,7 +109,7 @@ Future<Uint8List> generatePdf(
         pw.Align(
           alignment: pw.Alignment.centerLeft,
           child: Category(
-            title: 'This Month',
+            title: 'Filter By: $filter',
             font: ttf,
           ),
         ),
@@ -127,7 +137,7 @@ Future<pw.PageTheme> _myPageTheme(PdfPageFormat format) async {
       child: pw.Watermark(
         angle: 20,
         child: pw.Opacity(
-          opacity: 0.5,
+          opacity: 0.35,
           child: pw.Image(
             alignment: pw.Alignment.center,
             logoImage,
@@ -171,12 +181,22 @@ void showSharedToast(final BuildContext context) {
 
 // New method to create a table
 pw.Widget _buildTableWidget(List<dynamic> redeemedList) {
+  double totalValue = 0.0;
+
+  // Calculate the total value
+  for (var redeemedItem in redeemedList) {
+    totalValue += double.parse(redeemedItem['cs_value']);
+  }
+
   return pw.Table(
     border: pw.TableBorder.all(color: const PdfColor.fromInt(0xff000000)),
     defaultVerticalAlignment: pw.TableCellVerticalAlignment.middle,
     children: [
       // Top row of the table
       pw.TableRow(
+        decoration: const pw.BoxDecoration(
+          color: PdfColor.fromInt(0xFF64FFDA),
+        ),
         children: [
           pw.Container(
             padding: const pw.EdgeInsets.all(8.0),
@@ -192,7 +212,7 @@ pw.Widget _buildTableWidget(List<dynamic> redeemedList) {
           ),
           pw.Container(
             padding: const pw.EdgeInsets.all(8.0),
-            child: pw.Text("Value", textAlign: pw.TextAlign.center),
+            child: pw.Text("Value (RM)", textAlign: pw.TextAlign.center),
           ),
         ],
       ),
@@ -203,7 +223,7 @@ pw.Widget _buildTableWidget(List<dynamic> redeemedList) {
             pw.Container(
               padding: const pw.EdgeInsets.all(8.0),
               child: pw.Text(
-                redeemedItem['usage_date'],
+                redeemedItem['cm_usage_date'],
                 textAlign: pw.TextAlign.center,
                 style: const pw.TextStyle(fontSize: 14),
               ),
@@ -211,7 +231,7 @@ pw.Widget _buildTableWidget(List<dynamic> redeemedList) {
             pw.Container(
               padding: const pw.EdgeInsets.all(8.0),
               child: pw.Text(
-                redeemedItem['couponcode'],
+                redeemedItem['cm_coupon_code'],
                 textAlign: pw.TextAlign.center,
                 style: const pw.TextStyle(fontSize: 12),
               ),
@@ -227,13 +247,35 @@ pw.Widget _buildTableWidget(List<dynamic> redeemedList) {
             pw.Container(
               padding: const pw.EdgeInsets.all(8.0),
               child: pw.Text(
-                "RM ${redeemedItem['cs_value']}",
+                double.parse(redeemedItem['cs_value']).toStringAsFixed(2),
                 textAlign: pw.TextAlign.center,
                 style: const pw.TextStyle(fontSize: 14),
               ),
             ),
           ],
         ),
+      pw.TableRow(
+        decoration: const pw.BoxDecoration(
+          color: PdfColor.fromInt(0xFFA7FFEB),
+        ),
+        children: [
+          pw.Container(),
+          pw.Container(),
+          pw.Container(
+            padding: const pw.EdgeInsets.all(8.0),
+            child: pw.Text(
+              "Total",
+              textAlign: pw.TextAlign.center,
+              style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+            ),
+          ),
+          pw.Container(
+            padding: const pw.EdgeInsets.all(8.0),
+            child: pw.Text(totalValue.toStringAsFixed(2),
+                textAlign: pw.TextAlign.center),
+          ),
+        ],
+      ),
     ],
   );
 }
