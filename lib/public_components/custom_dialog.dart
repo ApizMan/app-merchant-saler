@@ -116,7 +116,7 @@ class CustomDialog extends StatefulBuilder {
                                   onPressed: btnOkOnPress,
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      color: kPrimaryColor,
+                                      color: getBgColor(dialogType),
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                     child: Padding(
@@ -125,7 +125,7 @@ class CustomDialog extends StatefulBuilder {
                                           child: Text(
                                         btnOkText,
                                         style:
-                                            const TextStyle(color: kWhiteColor),
+                                            TextStyle(color: getTextColor(dialogType)),
                                       )),
                                     ),
                                   ),

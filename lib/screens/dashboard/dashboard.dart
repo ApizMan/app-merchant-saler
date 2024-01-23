@@ -4,6 +4,7 @@ import 'package:app_merchant_saler/constant.dart';
 import 'package:app_merchant_saler/public_components/public_component.dart';
 import 'package:app_merchant_saler/resources/coupon_qr/coupon_qr_error_resources.dart';
 import 'package:app_merchant_saler/resources/coupon_qr/coupon_qr_resources.dart';
+import 'package:app_merchant_saler/resources/resources.dart';
 import 'package:app_merchant_saler/screens/dashboard/components/dashboard_body.dart';
 import 'package:app_merchant_saler/screens/screens.dart';
 import 'package:flutter/foundation.dart';
@@ -44,101 +45,116 @@ class _DashboardState extends State<Dashboard> {
       child: Scaffold(
         body: CustomBackgroundScreen(
           child: SafeArea(
-            child: Column(
-              children: [
-                const Expanded(
-                  child: Center(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.0),
-                      child: DashboardBody(),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Container(
-                    height: 50,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: kWhiteColor,
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(20.0)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          blurRadius: 4,
-                          offset: const Offset(0, 2),
-                        )
-                      ],
-                    ),
-                    child: Row(
+            child: FutureBuilder(
+                future: ProfileResources.getProfile(prefix: 'users'),
+                builder: (context, profile) {
+                  if (profile.hasData) {
+                    return Column(
                       children: [
                         Expanded(
-                          child: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const Dashboard()));
-                              });
-                            },
-                            icon: Column(
-                              children: [
-                                const Expanded(
-                                  child: Icon(
-                                    Icons.home_filled,
-                                    color: kPrimaryColor,
-                                  ),
-                                ),
-                                Space(height: 2.0),
-                                const Expanded(
-                                  child: Text(
-                                    "Home",
-                                    style: TextStyle(
-                                      color: kPrimaryColor,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () => scanQRCode(context),
-                            child: const CircleAvatar(
-                              backgroundColor: kPrimaryColor,
-                              maxRadius: 50,
-                              child: Icon(
-                                Icons.qr_code_scanner,
-                                color: kWhiteColor,
+                          child: Center(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20.0),
+                              child: DashboardBody(
+                                profile: profile.data,
                               ),
                             ),
                           ),
                         ),
-                        Expanded(
-                          child: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => const Profile()));
-                              });
-                            },
-                            icon: Column(
+                        Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Container(
+                            height: 50,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: kWhiteColor,
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(20.0)),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 2),
+                                )
+                              ],
+                            ),
+                            child: Row(
                               children: [
-                                const Expanded(
-                                  child: Icon(
-                                    Icons.person,
-                                    color: kPrimaryColor,
+                                Expanded(
+                                  child: IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        Navigator.of(context).pushReplacement(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const Dashboard()));
+                                      });
+                                    },
+                                    icon: Column(
+                                      children: [
+                                        const Expanded(
+                                          child: Icon(
+                                            Icons.home_filled,
+                                            color: kPrimaryColor,
+                                          ),
+                                        ),
+                                        Space(height: 2.0),
+                                        const Expanded(
+                                          child: Text(
+                                            "Home",
+                                            style: TextStyle(
+                                              color: kPrimaryColor,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                                Space(height: 2.0),
-                                const Expanded(
-                                  child: Text(
-                                    "Profile",
-                                    style: TextStyle(
-                                      color: kPrimaryColor,
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () => scanQRCode(context),
+                                    child: const CircleAvatar(
+                                      backgroundColor: kPrimaryColor,
+                                      maxRadius: 50,
+                                      child: Icon(
+                                        Icons.qr_code_scanner,
+                                        color: kWhiteColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) => const Profile(
+                                            ),
+                                          ),
+                                        );
+                                      });
+                                    },
+                                    icon: Column(
+                                      children: [
+                                        const Expanded(
+                                          child: Icon(
+                                            Icons.person,
+                                            color: kPrimaryColor,
+                                          ),
+                                        ),
+                                        Space(height: 2.0),
+                                        const Expanded(
+                                          child: Text(
+                                            "Profile",
+                                            style: TextStyle(
+                                              color: kPrimaryColor,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
@@ -147,11 +163,10 @@ class _DashboardState extends State<Dashboard> {
                           ),
                         ),
                       ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
+                    );
+                  }
+                  return const LoadingDialog();
+                }),
           ),
         ),
       ),
@@ -197,6 +212,8 @@ class _DashboardState extends State<Dashboard> {
           // ignore: use_build_context_synchronously
           CustomDialog.show(
             context,
+            icon: Icons.warning,
+            dialogType: DialogType.danger,
             title: "Coupon Already Been Claimed",
             btnOkText: 'OK',
             btnOkOnPress: () {
@@ -209,6 +226,8 @@ class _DashboardState extends State<Dashboard> {
           // ignore: use_build_context_synchronously
           CustomDialog.show(
             context,
+            icon: Icons.done,
+            dialogType: DialogType.success,
             title: "Coupon Successfully Claimed.",
             btnCancelText: 'Return to Dashboard',
             btnCancelOnPress: () => Navigator.of(context).pushReplacement(

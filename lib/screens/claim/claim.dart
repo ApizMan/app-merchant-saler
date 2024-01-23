@@ -1,5 +1,5 @@
 import 'package:app_merchant_saler/constant.dart';
-import 'package:app_merchant_saler/public_components/custom_month_year_picker/month_year_picker.dart';
+import 'package:app_merchant_saler/public_components/flutter_month_picker.dart';
 import 'package:app_merchant_saler/public_components/public_component.dart';
 import 'package:app_merchant_saler/resources/claim/claim_resources.dart';
 import 'package:app_merchant_saler/screens/claim/components/claim_body.dart';
@@ -116,24 +116,23 @@ class _ClaimState extends State<Claim> {
 
   Future<void> _onPressed({
     required BuildContext context,
-    String? locale,
   }) async {
-    final localeObj = locale != null ? Locale(locale) : null;
-    final selected = await showMonthYearPicker(
+    final selected = await showMonthPicker(
       context: context,
       initialDate: _selected ?? DateTime.now(),
       firstDate: DateTime(2019),
       lastDate: DateTime(2030),
-      locale: localeObj,
     );
     if (selected != null) {
-      final formattedDate = "${selected.year}-${selected.month.toString().padLeft(2, '0')}";
+      final formattedDate =
+          "${selected.year}-${selected.month.toString().padLeft(2, '0')}";
       monthPicker.text = formattedDate;
       setState(() {
         _selected = selected;
       });
     }
   }
+
   Widget _buildFilter(BuildContext context) {
     return Align(
       alignment: Alignment.topRight,
@@ -159,7 +158,8 @@ class _ClaimState extends State<Claim> {
                     onPressed: () {
                       setState(() {
                         _selected = null;
-                        monthPicker.text = ""; // Clear text when clearing selection
+                        monthPicker.text =
+                            ""; // Clear text when clearing selection
                       });
                     },
                   )

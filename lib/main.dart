@@ -1,4 +1,4 @@
-import 'package:app_merchant_saler/public_components/custom_month_year_picker/month_year_picker.dart';
+import 'package:app_merchant_saler/constant.dart';
 import 'package:app_merchant_saler/resources/resources.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -28,15 +28,12 @@ void main() async {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: kPrimaryColor),
         useMaterial3: true,
       ),
       home: token != null && merchantId != null
           ? const Dashboard()
           : const Login(),
-      localizationsDelegates: const [
-        MonthYearPickerLocalizations.delegate,
-      ],
     ),
   );
 }

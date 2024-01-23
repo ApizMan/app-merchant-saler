@@ -7,14 +7,17 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Profile extends StatelessWidget {
-  const Profile({super.key});
+  const Profile({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(context),
       body: const CustomBackgroundScreen(
-        child: ProfileBody(),
+        child: ProfileBody(
+        ),
       ),
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
@@ -27,11 +30,14 @@ class Profile extends StatelessWidget {
             child: CustomButton(
               onPressed: () async {
                 LoginResources.logout(prefix: 'logout').then(
-                  (value) => Navigator.pushReplacement(
+                  (value) => Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
                       builder: (context) => const Login(),
                     ),
+                    (route) {
+                      return false;
+                    },
                   ),
                 );
                 final SharedPreferences prefs =

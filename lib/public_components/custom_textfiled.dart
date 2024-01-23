@@ -18,7 +18,7 @@ class CustomTextfield extends StatefulWidget {
     required this.labelText,
     required this.hintText,
     this.textInputAction,
-    this.obscureText = false,
+    this.obscureText = true,
     this.maxLines = 1,
     this.expands = false,
     this.keyboardType,
@@ -35,7 +35,7 @@ class _CustomTextfieldState extends State<CustomTextfield> {
     return TextFieldBlocBuilder(
       textFieldBloc: widget.textFieldBloc,
       textInputAction: widget.textInputAction,
-      obscureText: widget.obscureText!,
+      obscureText: widget.password == true ? widget.obscureText : false,
       maxLines: widget.maxLines,
       expands: widget.expands!,
       keyboardType: widget.keyboardType,

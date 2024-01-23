@@ -57,7 +57,6 @@ class _LoginBodyState extends State<LoginBody> {
               CustomTextfield(
                 password: true,
                 textFieldBloc: storeLoginFormBloc!.pin,
-                obscureText: true,
                 labelText: 'PIN',
                 hintText: 'Key-in your PIN here',
               ),

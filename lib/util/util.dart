@@ -1,15 +1,10 @@
-import 'dart:io';
 
-import 'package:app_merchant_saler/constant.dart';
 import 'package:app_merchant_saler/util/category.dart';
 import 'package:app_merchant_saler/util/url_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:open_file/open_file.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
-import 'package:printing/printing.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 Future<Uint8List> generatePdf(
@@ -109,7 +104,7 @@ Future<Uint8List> generatePdf(
         pw.Align(
           alignment: pw.Alignment.centerLeft,
           child: Category(
-            title: 'Filter By: $filter',
+            title: filter != "" ? 'Filter By: $filter' : 'Filter By: All Month',
             font: ttf,
           ),
         ),
@@ -147,22 +142,6 @@ Future<pw.PageTheme> _myPageTheme(PdfPageFormat format) async {
       ),
     ),
   );
-}
-
-Future<void> saveAsFile(
-  final BuildContext context,
-  final LayoutCallback build,
-  final PdfPageFormat pageFormat,
-) async {
-  final bytes = await build(pageFormat);
-
-  final appDocDir = await getApplicationDocumentsDirectory();
-  final appDocPath = appDocDir.path;
-  final file = File('$appDocPath/document.pdf');
-  print('save as file ${file.path}...');
-
-  await file.writeAsBytes(bytes);
-  await OpenFile.open(file.path);
 }
 
 void showPrintedToast(final BuildContext context) {
@@ -225,7 +204,7 @@ pw.Widget _buildTableWidget(List<dynamic> redeemedList) {
               child: pw.Text(
                 redeemedItem['cm_usage_date'],
                 textAlign: pw.TextAlign.center,
-                style: const pw.TextStyle(fontSize: 14),
+                style: const pw.TextStyle(fontSize: 8),
               ),
             ),
             pw.Container(

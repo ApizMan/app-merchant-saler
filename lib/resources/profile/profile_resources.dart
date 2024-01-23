@@ -16,6 +16,7 @@ class ProfileResources {
         Uri.parse('$baseURL$prefix/$seq'),
         body: body,
         headers: {
+          "Accept": "application/json",
           'Authorization': 'Bearer $token',
         },
       );
@@ -34,6 +35,7 @@ class ProfileResources {
       var response = await http.get(
         Uri.parse('$baseURL$prefix/$seq'),
         headers: {
+          "Accept": "application/json",
           'Authorization': 'Bearer $token',
         },
       );

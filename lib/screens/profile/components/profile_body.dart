@@ -61,11 +61,14 @@ class _ProfileBodyState extends State<ProfileBody> {
                     );
                   },
                   child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
                     child: Column(
                       children: [
                         Text(
-                          toBeginningOfSentenceCase(profile.data['user']['merchant_name'].toString())!,
-                          style: TextStyle(
+                          toBeginningOfSentenceCase(profile.data['user']
+                                  ['merchant_name']
+                              .toString())!,
+                          style: const TextStyle(
                               fontSize: 28.0, fontWeight: FontWeight.bold),
                         ),
                         Padding(
@@ -102,7 +105,43 @@ class _ProfileBodyState extends State<ProfileBody> {
                                 ),
                               ),
                               Space(
-                                height: 20.0,
+                                height: 10.0,
+                              ),
+                              const Divider(
+                                thickness: 0.5,
+                                color: kGrey,
+                              ),
+                              Space(
+                                height: 10.0,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  const Text(
+                                    'Set Your New PIN',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Space(
+                                    height: 10.0,
+                                  ),
+                                  CustomTextfield(
+                                    textFieldBloc:
+                                        storeProfileFormBloc!.tempPIN,
+                                    labelText: 'Current PIN',
+                                    hintText: 'Key-in Your Current PIN at here',
+                                  ),
+                                  CustomTextfield(
+                                    textFieldBloc: storeProfileFormBloc!.newPIN,
+                                    labelText: 'New PIN',
+                                    hintText: 'Key-in Your New PIN at here',
+                                  ),
+                                ],
+                              ),
+                              Space(
+                                height: 10.0,
                               ),
                               SizedBox(
                                 width: double.infinity,

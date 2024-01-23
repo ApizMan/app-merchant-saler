@@ -12,6 +12,9 @@ class LoginResources {
     var response = await http.post(
       Uri.parse('$baseURL$prefix'),
       body: body,
+      headers: {
+        "Accept": "application/json",
+      },
     );
     return json.decode(response.body);
   }
@@ -23,6 +26,7 @@ class LoginResources {
     var response = await http.post(
       Uri.parse('$baseURL$prefix'),
       headers: {
+        "Accept": "application/json",
         'Authorization': 'Bearer $token',
       },
     );

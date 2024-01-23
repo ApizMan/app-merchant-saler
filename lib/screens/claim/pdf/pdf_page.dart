@@ -1,6 +1,5 @@
 import 'package:app_merchant_saler/resources/resources.dart';
 import 'package:app_merchant_saler/util/util.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
@@ -36,23 +35,17 @@ class _PdfPageState extends State<PdfPage> {
 
   @override
   Widget build(BuildContext context) {
-    final actions = <PdfPreviewAction>[
-      if (!kIsWeb)
-        const PdfPreviewAction(
-          icon: Icon(Icons.save),
-          onPressed: saveAsFile,
-        ),
-    ];
     return Scaffold(
       appBar: AppBar(
         title: const Text('Flutter PDF'),
+        elevation: 0,
+        scrolledUnderElevation: 0,
       ),
       body: FutureBuilder(
           future: ProfileResources.getProfile(prefix: 'users'),
           builder: (context, profile) {
             return PdfPreview(
               maxPageWidth: 700,
-              actions: actions,
               onPrinted: showPrintedToast,
               onShared: showSharedToast,
               build: (PdfPageFormat format) => generatePdf(

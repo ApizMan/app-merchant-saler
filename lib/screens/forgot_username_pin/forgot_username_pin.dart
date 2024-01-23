@@ -1,3 +1,4 @@
+import 'package:app_merchant_saler/constant.dart';
 import 'package:app_merchant_saler/public_components/public_component.dart';
 import 'package:app_merchant_saler/screens/forgot_username_pin/components/forgot_username_pin_body.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,30 @@ class ForgotUsernamePin extends StatelessWidget {
       appBar: _buildAppBar(context),
       body: const CustomBackgroundScreen(
         child: ForgotUsernamePinBody(),
+      ),
+      bottomNavigationBar: Container(
+        decoration: const BoxDecoration(
+          color: kPrimaryColor,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+          child: SizedBox(
+            width: double.infinity,
+            child: CustomButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              backgroundColor: kRedColor,
+              label: const Text(
+                "Return To Login",
+                style: TextStyle(
+                  color: kWhiteColor,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -27,6 +52,7 @@ class ForgotUsernamePin extends StatelessWidget {
         ),
       ),
       centerTitle: true,
+      automaticallyImplyLeading: false,
     );
   }
 }

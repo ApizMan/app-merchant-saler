@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:app_merchant_saler/helpers/share_preferences_helper.dart';
 import 'package:app_merchant_saler/helpers/validators.dart';
 import 'package:app_merchant_saler/models/login_model.dart';
-import 'package:app_merchant_saler/resources/login/login_error_resource.dart';
+import 'package:app_merchant_saler/resources/login/login_error_resources.dart';
 import 'package:app_merchant_saler/resources/resources.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 

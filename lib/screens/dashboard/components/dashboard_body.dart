@@ -3,9 +3,14 @@ import 'package:app_merchant_saler/public_components/public_component.dart';
 import 'package:app_merchant_saler/resources/resources.dart';
 import 'package:app_merchant_saler/screens/screens.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class DashboardBody extends StatefulWidget {
-  const DashboardBody({super.key});
+  final Map<String, dynamic> profile;
+  const DashboardBody({
+    super.key,
+    required this.profile,
+  });
 
   @override
   State<DashboardBody> createState() => _DashboardBodyState();
@@ -91,14 +96,16 @@ class _DashboardBodyState extends State<DashboardBody> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Expanded(
-          child: Image.asset('assets/images/logo.png'),
+        Image.asset(
+          'assets/images/logo.png',
+          width: 120.0,
         ),
-        const Expanded(
+        Expanded(
           child: Text(
-            "CAFE",
-            style: TextStyle(
-              fontSize: 60,
+            toBeginningOfSentenceCase(
+                widget.profile['user']['merchant_name'].toString())!,
+            style: const TextStyle(
+              fontSize: 24,
               fontWeight: FontWeight.w900,
             ),
             textAlign: TextAlign.center,

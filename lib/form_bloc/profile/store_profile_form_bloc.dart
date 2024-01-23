@@ -32,6 +32,10 @@ class StoreProfileFormBloc extends FormBloc<String, String> {
     ],
   );
 
+  final tempPIN = TextFieldBloc();
+
+  final newPIN = TextFieldBloc();
+
   StoreProfileFormBloc({required this.merchantSeqModel}) {
     name.updateValue(merchantSeqModel.merchantPic!);
     phoneNum.updateValue(merchantSeqModel.merchantContact!);
@@ -43,12 +47,16 @@ class StoreProfileFormBloc extends FormBloc<String, String> {
         phoneNum,
         email,
         address,
+        tempPIN,
+        newPIN,
       ],
     );
   }
 
   @override
   FutureOr<void> onSubmitting() async {
+    String currentPIN = tempPIN.value;
+    String newPin = newPIN.value;
     merchantSeqModel.merchantContact = phoneNum.value;
     merchantSeqModel.merchantAddress = address.value;
     merchantSeqModel.merchantPic = name.value;
@@ -68,6 +76,8 @@ class StoreProfileFormBloc extends FormBloc<String, String> {
         "merchant_address": merchantSeqModel.merchantAddress.toString(),
         "merchant_pic": merchantSeqModel.merchantPic.toString(),
         "merchant_email": merchantSeqModel.merchantEmail.toString(),
+        "temporary_pin": currentPIN.toString(),
+        "new_pin": newPin.toString(),
       },
     );
 
