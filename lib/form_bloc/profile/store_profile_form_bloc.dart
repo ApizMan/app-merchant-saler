@@ -60,13 +60,7 @@ class StoreProfileFormBloc extends FormBloc<String, String> {
     merchantSeqModel.merchantContact = phoneNum.value;
     merchantSeqModel.merchantAddress = address.value;
     merchantSeqModel.merchantPic = name.value;
-    if (merchantSeqModel.merchantEmail == email.value) {
-      emitFailure(
-          failureResponse: 'The merchant email has already been taken.');
-      return;
-    } else {
-      merchantSeqModel.merchantEmail = email.value;
-    }
+    merchantSeqModel.merchantEmail = email.value;
 
     // Inside the onSubmitting method
     final response = await ProfileResources.updateProfile(

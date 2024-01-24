@@ -11,9 +11,8 @@ class ProfileResources {
   }) async {
     try {
       final token = await ProfileResources.getToken();
-      final seq = await ProfileResources.getMarchSeq();
       var response = await http.put(
-        Uri.parse('$baseURL$prefix/$seq'),
+        Uri.parse('$baseURL$prefix'),
         body: body,
         headers: {
           "Accept": "application/json",
